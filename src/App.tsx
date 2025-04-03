@@ -7,18 +7,52 @@ import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
-import { wait } from './api';
+import { getTodos } from './api';
+import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
-  const [loading, setLoading] = useState(true);
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [actualFilters, setActualFilters] = useState('All');
+  const [filterParam, setFiltrParam] = useState<string>('');
+  const [isTodoModal, setIsTodoModal] = useState<number>(0);
 
   useEffect(() => {
-    const timer = wait(300).then(() => setLoading(false));
+    const todosIsLoad = async () => {
+      try {
+        const date: Todo[] = await getTodos();
 
-    console.log(timer);
+        if (date) {
+          setTodos(date);
+        }
+      } catch (error) {
+        console.error('Errors with getting todos:', error);
+
+        throw new Error();
+      }
+    };
+
+    todosIsLoad();
   }, []);
 
-  console.log(loading);
+  const getFilteredTodos = (array: Todo[], filter: string) => {
+    switch (filter) {
+      case 'All':
+        return todos;
+      case 'Active':
+        return array.filter(todo => !todo.completed);
+      case 'Completed':
+        return array.filter(todo => todo.completed);
+      default:
+        return array;
+    }
+  };
+
+  const filteredTodos = getFilteredTodos(todos, actualFilters);
+
+  // console.log(filteredTodos);
+  // console.log(actualFilters);
+
+  console.log(filterParam);
 
   return (
     <>
@@ -28,18 +62,27 @@ export const App: React.FC = () => {
             <h1 className="title">Todos:</h1>
 
             <div className="block">
-              <TodoFilter />
+              <TodoFilter
+                actualFilters={actualFilters}
+                setActualFilters={setActualFilters}
+                filterParam={filterParam}
+                setFiltrParam={setFiltrParam}
+              />
             </div>
 
             <div className="block">
-              {loading && <Loader />}
-              <TodoList />
+              {todos.length === 0 && <Loader />}
+              <TodoList
+                todos={filteredTodos}
+                filterParam={filterParam}
+                setIsTodoModal={setIsTodoModal}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      <TodoModal />
+      {isTodoModal && <TodoModal />}
     </>
   );
 };

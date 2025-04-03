@@ -1,12 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
+import { getUser } from '../../api';
+import { User } from '../../types/User';
 
-export const TodoModal: React.FC = () => {
+interface MyComponentProps {
+  userId: number;
+}
+
+export const TodoModal: React.FC<MyComponentProps> = ({ userId }) => {
+  const [users, setUsers] = useState<User>({
+    id: 0,
+    name: '',
+    email: '',
+    phone: '',
+  });
+  // const [usersIsLoaded, setIsUsersIsLoaded] = useState<boolean>(false);
+
+  useEffect(() => {
+    const usersIsLoad = async () => {
+      try {
+        const date: User = await getUser(userId);
+
+        console.log(date);
+
+        if (date) {
+          setUsers(date);
+        }
+      } catch (error) {
+        console.error('Errors with getting todos:', error);
+
+        throw new Error();
+      }
+    };
+
+    usersIsLoad();
+  }, [userId]);
+
+  console.log(users);
+
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {true ? (
+      {userId ? (
         <Loader />
       ) : (
         <div className="modal-card">
