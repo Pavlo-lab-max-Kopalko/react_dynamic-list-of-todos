@@ -52,7 +52,7 @@ export const App: React.FC = () => {
   // console.log(filteredTodos);
   // console.log(actualFilters);
 
-  console.log(filterParam);
+  console.log(isTodoModal);
 
   return (
     <>
@@ -81,8 +81,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {isTodoModal && <TodoModal />}
+      {!!isTodoModal && <TodoModal userId={isTodoModal} />}
     </>
   );
 };

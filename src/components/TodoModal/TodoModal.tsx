@@ -8,13 +8,7 @@ interface MyComponentProps {
 }
 
 export const TodoModal: React.FC<MyComponentProps> = ({ userId }) => {
-  const [users, setUsers] = useState<User>({
-    id: 0,
-    name: '',
-    email: '',
-    phone: '',
-  });
-  // const [usersIsLoaded, setIsUsersIsLoaded] = useState<boolean>(false);
+  const [user, setUsers] = useState<User | null>(null);
 
   useEffect(() => {
     const usersIsLoad = async () => {
@@ -36,13 +30,14 @@ export const TodoModal: React.FC<MyComponentProps> = ({ userId }) => {
     usersIsLoad();
   }, [userId]);
 
-  console.log(users);
+  console.log(user);
+  console.log(userId);
 
   return (
     <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
-      {userId ? (
+      {!user ? (
         <Loader />
       ) : (
         <div className="modal-card">
@@ -55,7 +50,12 @@ export const TodoModal: React.FC<MyComponentProps> = ({ userId }) => {
             </div>
 
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button type="button" className="delete" data-cy="modal-close" />
+            <button
+              type="button"
+              className="delete"
+              data-cy="modal-close"
+              onClick={() => setUsers(null)}
+            />
           </header>
 
           <div className="modal-card-body">
