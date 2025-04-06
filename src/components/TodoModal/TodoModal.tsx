@@ -20,23 +20,16 @@ export const TodoModal: React.FC<MyComponentProps> = ({
       try {
         const data: User = await getUser(todo.userId);
 
-        console.log(data);
-
         if (data) {
           setUser(data);
         }
       } catch (error) {
-        console.error('Errors with getting todos:', error);
-
         throw new Error();
       }
     };
 
     loadUser();
   }, [todo]);
-
-  console.log(user);
-  console.log(todo);
 
   return (
     <div className="modal is-active" data-cy="modal">

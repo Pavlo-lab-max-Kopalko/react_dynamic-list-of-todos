@@ -19,8 +19,6 @@ export const TodoList: React.FC<MyComponentProps> = ({
     }
   });
 
-  console.log(seekTodos);
-
   return (
     <table className="table is-narrow is-fullwidth">
       <thead>

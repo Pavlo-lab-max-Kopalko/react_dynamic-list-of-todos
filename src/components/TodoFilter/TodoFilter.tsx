@@ -3,26 +3,20 @@ import { useEffect, useState } from 'react';
 interface MyComponentProps {
   actualFilters: string;
   setActualFilters: React.Dispatch<React.SetStateAction<string>>;
-  filterQuery: string;
   setFilterQuery: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const TodoFilter: React.FC<MyComponentProps> = ({
   actualFilters,
   setActualFilters,
-  filterQuery,
   setFilterQuery,
 }) => {
   const [searchParam, setSearchParam] = useState<string>('');
 
-  console.log(filterQuery);
-
   useEffect(() => {
     const seekParam = searchParam.trim() === '' ? searchParam : searchParam;
 
-    console.log(seekParam);
-
-    setFilterQuery(seekParam);
+    setFilterQuery(seekParam.toLowerCase());
   }, [searchParam, setFilterQuery]);
 
   return (
@@ -30,7 +24,6 @@ export const TodoFilter: React.FC<MyComponentProps> = ({
       className="field has-addons"
       onSubmit={event => {
         event.preventDefault();
-        // handleSubmit();
       }}
     >
       <p className="control">
@@ -57,7 +50,6 @@ export const TodoFilter: React.FC<MyComponentProps> = ({
           value={searchParam}
           onChange={event => {
             setSearchParam(event.target.value);
-            // handleSubmit();
           }}
           placeholder="Search..."
         />

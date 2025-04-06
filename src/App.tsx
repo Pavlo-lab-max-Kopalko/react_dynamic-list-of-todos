@@ -12,7 +12,7 @@ import { Todo } from './types/Todo';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [actualFilters, setActualFilters] = useState('All');
+  const [actualFilters, setActualFilters] = useState<string>('All');
   const [filterQuery, setFilterQuery] = useState<string>(''); // filterQury
   const [todoModal, setTodoModal] = useState<Todo | null>(null); // todoModalId
 
@@ -55,11 +55,6 @@ export const App: React.FC = () => {
 
   const filteredTodos = getFilteredTodos(todos, actualFilters);
 
-  // console.log(filteredTodos);
-  // console.log(actualFilters);
-
-  console.log(todoModal);
-
   return (
     <>
       <div className="section">
@@ -71,7 +66,6 @@ export const App: React.FC = () => {
               <TodoFilter
                 actualFilters={actualFilters}
                 setActualFilters={setActualFilters}
-                filterQuery={filterQuery}
                 setFilterQuery={setFilterQuery}
               />
             </div>
