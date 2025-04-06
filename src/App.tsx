@@ -13,25 +13,31 @@ import { Todo } from './types/Todo';
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [actualFilters, setActualFilters] = useState('All');
-  const [filterParam, setFiltrParam] = useState<string>('');
-  const [isTodoModal, setIsTodoModal] = useState<number>(0);
+  const [filterQuery, setFilterQuery] = useState<string>(''); // filterQury
+  const [todoModal, setTodoModal] = useState<Todo | null>(null); // todoModalId
 
   useEffect(() => {
-    const todosIsLoad = async () => {
-      try {
-        const date: Todo[] = await getTodos();
+    // const loadTodos = async () => {
+    //   try {
+    //     const data: Todo[] = await getTodos();
 
-        if (date) {
-          setTodos(date);
-        }
-      } catch (error) {
-        console.error('Errors with getting todos:', error);
+    //     if (data) {
+    //       setTodos(data);
+    //     }
+    //   } catch (error) {
+    //     console.error('Errors with getting todos:', error);
 
+    //     throw new Error();
+    //   }
+    // };
+
+    getTodos()
+      .then(setTodos)
+      .catch(() => {
         throw new Error();
-      }
-    };
+      });
 
-    todosIsLoad();
+    // loadTodos();
   }, []);
 
   const getFilteredTodos = (array: Todo[], filter: string) => {
@@ -52,7 +58,7 @@ export const App: React.FC = () => {
   // console.log(filteredTodos);
   // console.log(actualFilters);
 
-  console.log(isTodoModal);
+  console.log(todoModal);
 
   return (
     <>
@@ -65,8 +71,8 @@ export const App: React.FC = () => {
               <TodoFilter
                 actualFilters={actualFilters}
                 setActualFilters={setActualFilters}
-                filterParam={filterParam}
-                setFiltrParam={setFiltrParam}
+                filterQuery={filterQuery}
+                setFilterQuery={setFilterQuery}
               />
             </div>
 
@@ -74,14 +80,16 @@ export const App: React.FC = () => {
               {todos.length === 0 && <Loader />}
               <TodoList
                 todos={filteredTodos}
-                filterParam={filterParam}
-                setIsTodoModal={setIsTodoModal}
+                filterQuery={filterQuery}
+                setTodoModal={setTodoModal}
               />
             </div>
           </div>
         </div>
       </div>
-      {!!isTodoModal && <TodoModal userId={isTodoModal} />}
+      {!!todoModal && (
+        <TodoModal todo={todoModal} setTodoModal={setTodoModal} />
+      )}
     </>
   );
 };

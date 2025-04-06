@@ -3,27 +3,27 @@ import { useEffect, useState } from 'react';
 interface MyComponentProps {
   actualFilters: string;
   setActualFilters: React.Dispatch<React.SetStateAction<string>>;
-  filterParam: string;
-  setFiltrParam: React.Dispatch<React.SetStateAction<string>>;
+  filterQuery: string;
+  setFilterQuery: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const TodoFilter: React.FC<MyComponentProps> = ({
   actualFilters,
   setActualFilters,
-  filterParam,
-  setFiltrParam,
+  filterQuery,
+  setFilterQuery,
 }) => {
   const [searchParam, setSearchParam] = useState<string>('');
 
-  console.log(filterParam);
+  console.log(filterQuery);
 
   useEffect(() => {
     const seekParam = searchParam.trim() === '' ? searchParam : searchParam;
 
     console.log(seekParam);
 
-    setFiltrParam(seekParam);
-  }, [searchParam, setFiltrParam]);
+    setFilterQuery(seekParam);
+  }, [searchParam, setFilterQuery]);
 
   return (
     <form
@@ -67,15 +67,17 @@ export const TodoFilter: React.FC<MyComponentProps> = ({
 
         <span className="icon is-right" style={{ pointerEvents: 'all' }}>
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={() => {
-              setSearchParam('');
-              setFiltrParam('');
-            }}
-          />
+          {searchParam && (
+            <button
+              data-cy="clearSearchButton"
+              type="button"
+              className="delete"
+              onClick={() => {
+                setSearchParam('');
+                setFilterQuery('');
+              }}
+            />
+          )}
         </span>
       </p>
     </form>

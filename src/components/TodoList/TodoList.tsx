@@ -2,17 +2,17 @@ import React from 'react';
 import { Todo } from '../../types/Todo';
 interface MyComponentProps {
   todos: Todo[];
-  filterParam: string;
-  setIsTodoModal: React.Dispatch<React.SetStateAction<number>>;
+  filterQuery: string;
+  setTodoModal: React.Dispatch<React.SetStateAction<Todo | null>>;
 }
 
 export const TodoList: React.FC<MyComponentProps> = ({
   todos,
-  filterParam,
-  setIsTodoModal,
+  filterQuery,
+  setTodoModal,
 }) => {
   const seekTodos = todos.filter(todo => {
-    if (todo.title.includes(filterParam.toLocaleLowerCase())) {
+    if (todo.title.includes(filterQuery.toLocaleLowerCase())) {
       return true;
     } else {
       return false;
@@ -64,7 +64,7 @@ export const TodoList: React.FC<MyComponentProps> = ({
                   data-cy="selectButton"
                   className="button"
                   type="button"
-                  onClick={() => setIsTodoModal(todo.userId)}
+                  onClick={() => setTodoModal(todo)}
                 >
                   <span className="icon">
                     <i className="far fa-eye" />
