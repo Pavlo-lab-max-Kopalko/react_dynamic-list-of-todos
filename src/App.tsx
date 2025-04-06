@@ -33,7 +33,10 @@ export const App: React.FC = () => {
 
     getTodos()
       .then(setTodos)
-      .catch(() => {
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.log('Помилки під час отримання завдань:', error);
+
         throw new Error();
       });
 
@@ -43,7 +46,7 @@ export const App: React.FC = () => {
   const getFilteredTodos = (array: Todo[], filter: string) => {
     switch (filter) {
       case 'All':
-        return todos;
+        return array;
       case 'Active':
         return array.filter(todo => !todo.completed);
       case 'Completed':
